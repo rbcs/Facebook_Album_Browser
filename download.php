@@ -12,7 +12,7 @@ $error = ""; //error holder
 
 if(extension_loaded('zip'))
 {
-  $zip = new ZipArchive();
+	$zip = new ZipArchive();
 	$zip_name = $album_id.".zip";
 	if($zip->open($zip_name, ZIPARCHIVE::CREATE)!==TRUE)
 	{
