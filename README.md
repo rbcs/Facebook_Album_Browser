@@ -4,3 +4,4 @@ Facebook_Album_Browser
  You can view it with slide-show,download and also share your photo with your Google+ account.
  Domain=
  http://rinkeshchauhanfb.comoj.com/rtcamp/
+Developed By: Rinkesh Chauhan
