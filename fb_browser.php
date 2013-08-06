@@ -1,9 +1,10 @@
 <?php
+ini_set('max_execution_time', 300);
 require_once 'config.php';
 
 $facebook = unserialize($_SESSION['fbobject']);
 $_SESSION['fbobject'] = serialize($facebook);
-$user = $facebook->getUser();  //Get facebook User Id
+$user = $facebook->getUser();	//Get facebook User Id
 
 if ($user) 
 {
@@ -55,8 +56,10 @@ if ($user) {
 	<link type="text/css" href="lib/fancybox/jquery.fancybox.css" rel="stylesheet" />
     <link href="lib/css/style.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="lib/images/camera.png" />
+    <script type="text/javascript" src="lib/js/jquery-1.10.2.js"></script> 
 	</head>
 <body>
+<form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post" name="form" >
 <div class="container">
 	<div class="links" >
 		<div class="span12">
@@ -67,8 +70,8 @@ if ($user) {
                 <div id="user-info" > 
                 	<div>
                      	<p style="color:#FFFFFF"><?php echo $me['name']?></p>
-                      	<p><a href="<?php echo $logoutUrl;?>" title="Click to logout">Logout</a></p>
-                  	</div>
+                      	<p><input type="button" value="Download Selected" id="btntest" onClick="check()"/><input type="button" value="Download All" id="checkall" /><a href="<?php echo $logoutUrl;?>" title="Click to logout">Logout</a></p>
+                        </div>
           		</div>
                 <div class="clearfix"></div>
      	 	</div>
@@ -81,21 +84,76 @@ if ($user) {
         	<a href="album.php?id=<?=$album['id']?>">
             	<img src="<?=$album['thumb']?>" alt="<?=$album['id'] ?>" class="<?php if($album['count']>0) echo "view-album" ?>" title="View album">
             </a>
+           
             <p class="album-title" title="<?=$album['count']?>">
             	<?=$album['count']?>
             </p>
             <p class="album-title" title="<?=$album['name']?>">
+            
               	<?=substr($album['name'], 0, 21)?>
             </p>
+           
             <div>
-              <a href="http://rinkeshchauhanfb.comoj.com/rtcamp/download.php?album_id=<?php echo $album['id']?>">Download</a>
+               <input name="chb[]" type="checkbox" value="<?php echo $album['id']; ?>" >&nbsp;&nbsp;<a href="http://rinkeshchauhanfb.comoj.com/rtcamp/download.php?album_id=<?php echo $album['id']?>">Download</a>
             </div>
+           
          </div>
      </div>
+     
 	 <?php }
 	 ?>
+  
+     <script type="text/javascript">
+// Returns an array with values of the selected (checked) checkboxes in "form"
+function getSelectedChbox(frm) {
+  var selchbox = [];        // array that will store the value of selected checkboxes
+
+  // gets all the input tags in frm, and their number
+  var inpfields = frm.getElementsByTagName('input');
+  var nr_inpfields = inpfields.length;
+
+  // traverse the inpfields elements, and adds the value of selected (checked) checkbox in selchbox
+  for(var i=0; i<nr_inpfields; i++) {
+    if(inpfields[i].type == 'checkbox' && inpfields[i].checked == true) selchbox.push(inpfields[i].value);
+	
+  }
+  
+
+  return selchbox;
+}
+
+
+
+var checkAll = document.getElementById("checkall");
+
+checkAll.onclick = function(){
+    [].forEach.call(
+        document.forms['form'].querySelectorAll("input[type='checkbox']"),
+        function(el){
+            el.checked=true;
+			 var selchbox = getSelectedChbox(this.form);     // gets the array returned by getSelectedChbox()
+  window.location.href='http://rinkeshchauhanfb.comoj.com/rtcamp/selected_download.php?album='+selchbox;
+			
+    });
+}
+// When click on #btntest, alert the selected values
+document.getElementById('btntest').onclick = function(){
+  var selchbox = getSelectedChbox(this.form);     // gets the array returned by getSelectedChbox()
+  if(selchbox == "")
+  {
+  alert ("please select atleast one checkbox to download!!!");
+  }
+  else
+  {
+  window.location.href='http://rinkeshchauhanfb.comoj.com/rtcamp/selected_download.php?album='+selchbox;
+  }
+}
+//-->
+</script>
+    
 	    </div>
 	</div>
 </div>
+</form>
 </body>
 </html>
