@@ -5,7 +5,7 @@ $user = $facebook->getUser();
 
 if ($user) // Logged in
 {
-  $_SESSION['fbobject'] = serialize($facebook);
+	$_SESSION['fbobject'] = serialize($facebook);
     header('Location: http://rinkeshchauhanfb.comoj.com/rtcamp/fb_browser.php');
 }
 else
