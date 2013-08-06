@@ -1,6 +1,6 @@
 <?php
 if( !isset($_GET['id']) )
-  die("No direct access allowed!");
+	die("No direct access allowed!");
 	
 require_once 'config.php';
 
@@ -8,7 +8,7 @@ $facebook = unserialize($_SESSION['fbobject']);
 $_SESSION['fbobject'] = serialize($facebook);
 
 $user = $facebook->getUser();
-
+$returnAlbumPhotos = array();
 if ($user) 
 {
 		$logoutUrl = $facebook->getLogoutUrl(array(
@@ -50,6 +50,9 @@ if ($user) {
 				$photos[] = $temp;
 			}
 		}
+		
+		
+		
 	} catch (FacebookApiException $e) {
 		error_log($e);
 		$user = null;
@@ -106,6 +109,7 @@ if ($user) {
     	<div class="album tile">   
         	<a href="<?=$photo['source']?>" title="<?=$photo['name']?>" rel="pic_gallery">
            		<img src="<?=$photo['picture']?>"/>
+                                           <a target="blank" href="https://plus.google.com/share?url=<?php echo $photo['source']; ?>" class="btn btn-primary">Share on Google+</a>
             </a>
          </div>
     </div>
@@ -120,6 +124,8 @@ if ($user) {
 		</div>
 	</div>
 </div>
+
+
 <script type="text/javascript" src="lib/js/jquery-1.6.1.min.js"></script>
 <script type="text/javascript" src="lib/js/jquery.fancybox-1.3.4.pack.js"></script>
 <script>
